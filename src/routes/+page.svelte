@@ -5,13 +5,19 @@
     let textInput // tekst fra bruker
     let items = [] // lista med ting liste ut
     let currentMode // "ad" eller "article", settes fra knapp trykka på
+    let loading = false
+    let listHTML
 
     // start skraping
     function scrape (mode) {
         currentMode = mode
+        loading = true
 
         scrapeURLs(textInput.split("\n"), mode) 
-            .then(newItems => items = newItems)
+        .then((newItems) => {
+            items = newItems
+            loading = false
+        })
     }
 
     // faktisk skraping
@@ -41,38 +47,68 @@
         return newItems // ny liste klar
     }
 
+    // kopifunksjon stjælt fra https://stackoverflow.com/questions/36639681/how-to-copy-text-from-a-div-to-clipboard
+    function copyList () {
+        var range = document.createRange();
+        range.selectNode(listHTML);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy"); // bør byttes med navigator.clipboard.writeText()
+        window.getSelection().removeAllRanges();
+    }
+
 </script>
 
 <h1>✍ nyhetsbrev-generator</h1>
 
-<p>#1: lim inn lenker til artikler eller annonser:</p>
-<textarea bind:value={textInput} />
+<h2>👇 lim inn lenker til artikler eller annonser:</h2>
+<textarea bind:value={textInput} rows="15" cols="90"/>
 
-<p>#2: trykk på riktig knapp for riktig liste:</p>
+<h2>👇 trykk på riktig knapp for riktig liste:</h2>
 <button on:click={ () => scrape("article")}>📰 lag artikkel-liste</button>
 <button on:click={ () => scrape("ad")}>💰 lag annonse-liste</button>
+<button on:click={ copyList }>💘 kopier liste</button>
 
-<p>#3: liste:</p>
-
-{#if currentMode == "article"}
-    {#each items as item}
-        <a href = {item.url}>{item.title}</a>
-        <p>{item.info}</p>
-        <br><br/>
-    {/each}
+{#if loading}
+    <p>⏳ laster...</p>
 {/if}
 
-{#if currentMode == "ad"}
-    <ul>
+<div bind:this={listHTML}>
+    {#if !loading && currentMode == "article"}
         {#each items as item}
-            <li>{item.info}: <a href = {item.url}>{item.title}</a></li>
+            <b><a href = {item.url}>{item.title}</a></b>
+            <p>{item.info}</p>
+            <br>
         {/each}
-    </ul>
-{/if}
+    {/if}
+
+    {#if !loading && currentMode == "ad"}
+        <ul>
+            {#each items as item}
+                <li>{item.info}: <a href = {item.url}>{item.title}</a></li>
+            {/each}
+        </ul>
+    {/if}
+</div>
 
 <style>
     :global(body) {
         background-color: steelblue;
+        color: white;
+        font-family: 'Courier New', Courier, monospace;
+        padding: 1.5em;
+    }
+
+    h1 {
+        font-size: 3em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+        font-weight: normal;
+    }
+
+    a {
         color: white;
     }
 
