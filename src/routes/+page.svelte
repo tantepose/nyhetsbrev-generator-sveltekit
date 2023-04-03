@@ -15,19 +15,19 @@
     }
 
     // faktisk skraping
-    async function scrapeURLs(urls, mode) {
+    async function scrapeURLs(urls) {
         const newItems = []
         
         for (const url of urls) {
-            console.log("🔍📰 skraper ", url)
+            console.log("🔍 skraper ", url)
 
-            const respons = await axios.get(url)
-            const $ = cheerio.load(respons.data)
+            const response = await axios.get(url)
+            const $ = cheerio.load(response.data)
 
             const item = {} // artikkel eller annonse å legge til i items-lista
             item.url = url
 
-        if (currentMode == "article") {                 // skrape artikkel
+            if (currentMode == "article") {                 // skrape artikkel
                 item.title = $('h1').first().text()     // tittel er første h1
                 item.info = $('.standfirst').text()     // ingress har klassen standfirst
             } else if (currentMode == "ad") {           // skrape annonse
