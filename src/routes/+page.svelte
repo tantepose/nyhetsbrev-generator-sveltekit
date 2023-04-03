@@ -31,8 +31,8 @@
                 item.title = $('h1').first().text()     // tittel er første h1
                 item.info = $('.standfirst').text()     // ingress har klassen standfirst
             } else if (currentMode == "ad") {           // skrape annonse
-                item.title = $('.firstname').text()     // selskapet har klassen firstname
-                item.info = $('h1').first().text()      // tittel er første h1
+                item.info = $('.firstname').text()     // selskapet har klassen firstname
+                item.title = $('h1').first().text()      // tittel er første h1
             }
             
             newItems.push(item) // legg til i lista
