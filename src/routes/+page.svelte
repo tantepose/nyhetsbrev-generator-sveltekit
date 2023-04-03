@@ -1,15 +1,15 @@
 <script>
-    import axios from 'axios'; // hente HTML
+    import axios from 'axios'; // hente HTML, bør byttes med fetch
     import * as cheerio from 'cheerio'; // navigere HTML
 
-    let textInput // tekst fra bruker
-    let items = [] // lista med ting liste ut
+    let textInput // tekst textarea
+    let items = [] // lista med ferdig data å faktisk liste ut
     let currentMode // "ad" eller "article", settes fra knapp trykka på
-    let loading = false
-    let listHTML
+    let loading = false // spinner, yo
+    let renderedList // div-en som tegnes ut, for kopiering
 
-    // start skraping
-    function scrape (mode) {
+    // klikk fra bruker
+    function start (mode) {
         currentMode = mode
         loading = true
 
@@ -30,27 +30,27 @@
             const response = await axios.get(url)
             const $ = cheerio.load(response.data)
 
-            const item = {} // artikkel eller annonse å legge til i items-lista
+            const item = {}
             item.url = url
 
-            if (currentMode == "article") {                 // skrape artikkel
-                item.title = $('h1').first().text()     // tittel er første h1
-                item.info = $('.standfirst').text()     // ingress har klassen standfirst
-            } else if (currentMode == "ad") {           // skrape annonse
-                item.info = $('.firstname').text()     // selskapet har klassen firstname
-                item.title = $('h1').first().text()      // tittel er første h1
+            if (currentMode == "article") {
+                item.title = $('h1').first().text()
+                item.info = $('.standfirst').text()
+            } else if (currentMode == "ad") {
+                item.info = $('.firstname').text()
+                item.title = $('h1').first().text()
             }
             
-            newItems.push(item) // legg til i lista
+            newItems.push(item)
         }
     
-        return newItems // ny liste klar
+        return newItems
     }
 
     // kopifunksjon stjælt fra https://stackoverflow.com/questions/36639681/how-to-copy-text-from-a-div-to-clipboard
     function copyList () {
         var range = document.createRange();
-        range.selectNode(listHTML);
+        range.selectNode(renderedList);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
         document.execCommand("copy"); // bør byttes med navigator.clipboard.writeText()
@@ -65,15 +65,15 @@
 <textarea bind:value={textInput} rows="15" cols="90"/>
 
 <h2>👇 trykk på riktig knapp for riktig liste:</h2>
-<button on:click={ () => scrape("article")}>📰 lag artikkel-liste</button>
-<button on:click={ () => scrape("ad")}>💰 lag annonse-liste</button>
+<button on:click={ () => start("article")}>📰 lag artikkel-liste</button>
+<button on:click={ () => start("ad")}>💰 lag annonse-liste</button>
 <button on:click={ copyList }>💘 kopier liste</button>
 
 {#if loading}
     <p>⏳ laster...</p>
 {/if}
 
-<div bind:this={listHTML}>
+<div bind:this={renderedList}>
     {#if !loading && currentMode == "article"}
         {#each items as item}
             <b><a href = {item.url}>{item.title}</a></b>
