@@ -1,7 +1,4 @@
 <script>
-    // gå til riktig mappe og start nettleser med:
-    // chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
-
     import axios from 'axios'; // hente HTML
     import * as cheerio from 'cheerio'; // navigere HTML
 
