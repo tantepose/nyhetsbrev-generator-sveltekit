@@ -1,4 +1,4 @@
-![Skjermbilde 2023-04-03 160633](https://user-images.githubusercontent.com/30694360/229534002-b2cf493b-6123-42cb-8d52-a60a4ab27436.jpg)
+![Skjermbilde 2023-04-04 131200](https://user-images.githubusercontent.com/30694360/229774678-650f731c-6e7e-4ab8-ab86-1365148a3cf5.jpg)
 
 # nyhetsbrev-generator, sveltekit edition
 
@@ -9,4 +9,5 @@ Nå i Sveltekit, yo.
 🔗 https://nyhetsbrev-generator.vercel.app/
 
 Må kjøres i nettleser uten sånne cors-greier: 
+
 chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
