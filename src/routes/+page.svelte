@@ -2,22 +2,35 @@
     import axios from 'axios'; // hente HTML, bør byttes med fetch
     import * as cheerio from 'cheerio'; // navigere HTML
 
-    let textInput // tekst textarea
-    let items = [] // lista med ferdig data å faktisk liste ut
-    let currentMode // "ad" eller "article", settes fra knapp trykka på
+    let textInput // all tekst i textarea
+    let items = [] // lista av objekter med ferdig data å faktisk liste ut
+    let mode // "ad" eller "article" for riktig skraping og utlisting
     let loading = false // spinner, yo
-    let renderedList // div-en som tegnes ut, for kopiering
+    let renderedList // div-en som tegnes ut, referanse for kopiering
 
-    // klikk fra bruker
-    function start (mode) {
-        currentMode = mode
+    // klikk på lag liste-knapp
+    function start () {
         loading = true
+        modeCheck()
 
-        scrapeURLs(textInput.split("\n"), mode) 
-        .then((newItems) => {
+        scrapeURLs(textInput.split("\n")) // skrap URL-er fra hver linje i textarea
+        .then((newItems) => { // skraping ferdig, bruk data
             items = newItems
             loading = false
         })
+    }
+
+    // automatisk riktig mode ut fra første URL i lista
+    function modeCheck() {
+        const check = textInput.split("\n")[0].search("/jobb/") // søk etter "/jobb/" i første input-linje
+
+        if (check > -1) { // fant "/jobb/"
+            mode = "ad"
+            return "ad"
+        } else {
+            mode = "article"
+            return "article"
+        }
     }
 
     // faktisk skraping
@@ -33,10 +46,10 @@
             const item = {}
             item.url = url
 
-            if (currentMode == "article") {
+            if (mode == "article") {
                 item.title = $('h1').first().text()
                 item.info = $('.standfirst').text()
-            } else if (currentMode == "ad") {
+            } else if (mode == "ad") {
                 item.info = $('.firstname').text()
                 item.title = $('h1').first().text()
             }
@@ -61,20 +74,19 @@
 
 <h1>✍ nyhetsbrev-generator</h1>
 
-<h2>👇 lim inn lenker til artikler eller annonser:</h2>
+<h2>👇 lim inn annonse- eller artikkel-lenker:</h2>
 <textarea bind:value={textInput} rows="15" cols="90"/>
 
-<h2>👇 trykk på riktig knapp for riktig liste:</h2>
-<button on:click={ () => start("article")}>📰 lag artikkel-liste</button>
-<button on:click={ () => start("ad")}>💰 lag annonse-liste</button>
+<h2>👇 lag og kopier liste:</h2>
+<button on:click={ start }>📰 lag liste</button>
 <button on:click={ copyList }>💘 kopier liste</button>
 
 {#if loading}
-    <p>⏳ laster...</p>
+    <p>⏳ laster... (eller feil, si)</p>
 {/if}
 
 <div bind:this={renderedList}>
-    {#if !loading && currentMode == "article"}
+    {#if !loading && mode == "article"}
         {#each items as item}
             <b><a href = {item.url}>{item.title}</a></b>
             <p>{item.info}</p>
@@ -82,7 +94,7 @@
         {/each}
     {/if}
 
-    {#if !loading && currentMode == "ad"}
+    {#if !loading && mode == "ad"}
         <ul>
             {#each items as item}
                 <li>{item.info}: <a href = {item.url}>{item.title}</a></li>
