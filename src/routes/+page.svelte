@@ -1,7 +1,4 @@
 <script>
-    import axios from 'axios'; // hente HTML, bør byttes med fetch
-    import * as cheerio from 'cheerio'; // navigere HTML
-
     let textInput // all tekst i textarea
     let items = [] // lista av objekter med ferdig data å faktisk liste ut
     let mode // "ad" eller "article" for riktig skraping og utlisting
@@ -11,7 +8,6 @@
     // klikk på lag liste-knapp
     function start () {
         loading = true
-        modeCheck()
 
         scrapeURLs(textInput.split("\n")) // skrap URL-er fra hver linje i textarea
         .then((newItems) => { // skraping ferdig, bruk data
@@ -20,8 +16,23 @@
         })
     }
 
+    // faktisk skraping
+    async function scrapeURLs(urls) {
+        getMode()
+
+        const newItems = []
+        
+        for (const url of urls) {
+            const response = await fetch(`/api/?url=${(url)}&mode=${(mode)}`)
+            const data = await response.json();
+            newItems.push(data)
+        }
+    
+        return newItems
+    }
+
     // automatisk riktig mode ut fra første URL i lista
-    function modeCheck() {
+    function getMode() {
         const check = textInput.split("\n")[0].search("/jobb/") // søk etter "/jobb/" i første input-linje
 
         if (check > -1) { // fant "/jobb/"
@@ -33,33 +44,6 @@
         }
     }
 
-    // faktisk skraping
-    async function scrapeURLs(urls) {
-        const newItems = []
-        
-        for (const url of urls) {
-            console.log("🔍 skraper ", url)
-
-            const response = await axios.get(url)
-            const $ = cheerio.load(response.data)
-
-            const item = {}
-            item.url = url
-
-            if (mode == "article") {
-                item.title = $('h1').first().text()
-                item.info = $('.standfirst').text()
-            } else if (mode == "ad") {
-                item.info = $('.firstname').text()
-                item.title = $('h1').first().text()
-            }
-            
-            newItems.push(item)
-        }
-    
-        return newItems
-    }
-
     // kopifunksjon stjælt fra https://stackoverflow.com/questions/36639681/how-to-copy-text-from-a-div-to-clipboard
     function copyList () {
         var range = document.createRange();
@@ -69,7 +53,6 @@
         document.execCommand("copy"); // bør byttes med navigator.clipboard.writeText()
         window.getSelection().removeAllRanges();
     }
-
 </script>
 
 <h1>✍ nyhetsbrev-generator</h1>
