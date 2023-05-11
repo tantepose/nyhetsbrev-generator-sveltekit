@@ -5,30 +5,24 @@
     let loading = false // spinner, yo
     let renderedList // div-en som tegnes ut, referanse for kopiering
 
-    // klikk på lag liste-knapp
+    // klikk på start-knapp
     function start () {
         loading = true
+        mode = getMode()
 
-        scrapeURLs(textInput.split("\n")) // skrap URL-er fra hver linje i textarea
-        .then((newItems) => { // skraping ferdig, bruk data
-            items = newItems
+        getItems(textInput.split("\n")) // skrap URL-er fra hver linje i textarea
+        .then(() => {
             loading = false
         })
     }
 
-    // faktisk skraping
-    async function scrapeURLs(urls) {
-        getMode()
-
-        const newItems = []
-        
+    // start skraping gjennom API
+    async function getItems(urls) {
         for (const url of urls) {
             const response = await fetch(`/api/?url=${(url)}&mode=${(mode)}`)
             const data = await response.json();
-            newItems.push(data)
+            items.push(data)
         }
-    
-        return newItems
     }
 
     // automatisk riktig mode ut fra første URL i lista
@@ -36,10 +30,8 @@
         const check = textInput.split("\n")[0].search("/jobb/") // søk etter "/jobb/" i første input-linje
 
         if (check > -1) { // fant "/jobb/"
-            mode = "ad"
             return "ad"
         } else {
-            mode = "article"
             return "article"
         }
     }
@@ -111,5 +103,6 @@
         white-space: pre;
         overflow-wrap: normal;
         overflow-x: scroll;
+        padding: 10px;
     }
 </style>
