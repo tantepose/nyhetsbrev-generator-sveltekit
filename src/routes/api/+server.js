@@ -14,12 +14,11 @@ export async function GET({ url }) {
   const item = {}
   
   item.url = target
+  item.title = $('h1').first().text()
 
   if (mode == "artikkel") {
-    item.title = $('h1').first().text()
     item.info = $('.standfirst').text()
   } else if (mode == "annonse") {
-    item.title = $('h1').first().text()
     item.info = $('.firstname').text()
   }
 
