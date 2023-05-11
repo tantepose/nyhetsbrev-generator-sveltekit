@@ -7,7 +7,3 @@ Verktøy for å gjøre det litt mindre smertefullt å få inn artikler og jobban
 Nå i Sveltekit, yo.
 
 🔗 https://nyhetsbrev-generator.vercel.app/
-
-Må kjøres i nettleser uten sånne cors-greier: 
-
-chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
