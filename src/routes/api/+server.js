@@ -15,10 +15,10 @@ export async function GET({ url }) {
   
   item.url = target
 
-  if (mode == "article") {
+  if (mode == "artikkel") {
     item.title = $('h1').first().text()
     item.info = $('.standfirst').text()
-  } else if (mode == "ad") {
+  } else if (mode == "annonse") {
     item.title = $('h1').first().text()
     item.info = $('.firstname').text()
   }
