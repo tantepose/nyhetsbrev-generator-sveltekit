@@ -51,12 +51,13 @@
 
 <h1>✍ nyhetsbrev-generator</h1>
 
-<h2>👇 lim inn annonse- eller artikkel-lenker:</h2>
-<textarea bind:value={textInput} rows="15" cols="120"/>
+<h2></h2>
+<textarea bind:value={textInput} rows="15" cols="120" placeholder="(lim inn annonse- eller artikkel-lenker her)"/>
 
-<h2>👇 lag og kopier liste:</h2>
-<button on:click={ start }>📰 lag liste</button>
-<button on:click={ copyList }>💘 kopier liste</button>
+<div>
+    <button on:click={ start }>💪 lag liste</button>
+    <button on:click={ copyList }>✍ kopier liste</button>
+</div>
 
 {#if textInput }
     <p>💡 antall linjer: {textInput.split("\n").length}</p>
@@ -86,8 +87,8 @@
 
 <style>
     :global(body) {
-        background-color: steelblue;
-        color: white;
+        background-color: #1f2430;
+        color: #fff4c8;
         font-family: 'Courier New', Courier, monospace;
         padding: 1.5em;
     }
@@ -102,17 +103,30 @@
     }
 
     a {
-        color: white;
+        color: #ff9c48;
     }
 
     textarea {
+        background-color: #404755;
+        color: #fff4c8;
+        border: none;
+        resize: none;
         white-space: pre;
         overflow-wrap: normal;
         overflow-x: scroll;
         padding: 10px;
+        overflow: hidden;
+
     }
 
     button {
         padding: 10px;
+        margin: 10px;
+        background-color: #404755;
+        color: #ff9c48;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 1em;
+        display: inline;
+        width: 200px;
     }
 </style>
