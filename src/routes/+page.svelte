@@ -38,7 +38,7 @@
         }
     }
 
-    // kopifunksjon stjælt fra https://stackoverflow.com/questions/36639681/how-to-copy-text-from-a-div-to-clipboard
+    // stjælt fra https://stackoverflow.com/questions/36639681/how-to-copy-text-from-a-div-to-clipboard
     function copyList () {
         var range = document.createRange();
         range.selectNode(renderedList);
@@ -47,12 +47,32 @@
         document.execCommand("copy"); // bør byttes med navigator.clipboard.writeText()
         window.getSelection().removeAllRanges();
     }
+
+    // basert på https://erikmartinjordan.com/get-random-emoji-javascript
+    let emojis = [
+        '🍇','🍈','🍉','🍊','🍋','🍌','🍍','🥭','🍎','🍏','🍐','🍑','🍒','🍓','🥝','🍅',
+        '🍦','🍧','🍨','🍩','🍪','🎂','🍰','🧁','🥧','🍫','🍬','🍭','🍮','🍯',
+        '🐵','🐒','🦍','🦧','🐶','🐕','🐕‍🦺','🐩','🐺','🦊','🦝','🐱','🐈','🦁','🐯','🐅','🐆','🐴','🐎','🦄',
+        '⚽','⚾','🥎','🏀','🏐','🏈','🏉','🎾','🥏','🎳','🏏','🏑','🏒','🥍','🏓','🏸','🥊','🥋','🥅','⛳','⛸','🎣','🤿','🎽','🎿','🛷','🥌',
+        '📔','📕','📖','📗','📘','📙','📚','📓','📒','📃','📜','📄','📰','🗞','📑','🔖',
+        '👓','🕶','🥽','🥼','🦺','👔','👕','👖','🧣','🧤','🧥','🧦','👗','👘','🥻','🩱','🩳','👙','👚','👛','👜','👝','🛍','🎒','👞','👟','🥾','🥿','👠','👡','🩰','👢','👑','👒','🎩','🎓','🧢','📿','💄','💍','💎',
+        '🍼','🥛','☕','🍵','🍶','🍾','🍷','🍸','🍹','🍺','🍻','🥂','🥃','🥤','🧃','🧉','🧊',
+        '🥑','🍆','🥔','🥕','🌽','🌶','🥒','🥬','🥦','🧄','🧅','🍄','🥜','🌰',
+        '💐','🌸','💮','🌹','🥀','🌺','🌻','🌼','🌷',
+        '🦃','🐔','🐓','🐣','🐤','🐥','🐦','🐧','🕊','🦅','🦆','🦢','🦉','🦩','🦚','🦜',
+        '👶','🧒','👦','👧','🧑','👱','👨','🧔'
+    ]
+
+    function getEmoji (array) { 
+        return array[Math.floor(Math.random()*array.length)];
+    }
+
 </script>
 
 <h1>✍ nyhetsbrev-generator</h1>
 
-<h2></h2>
-<textarea bind:value={textInput} rows="15" cols="120" placeholder="(lim inn annonse- eller artikkel-lenker her)"/>
+<h2>lim inn artikler <i>eller</i> annonser:</h2>
+<textarea bind:value={textInput} rows="15" cols="120" placeholder="(hver URL på ny linje)"/>
 
 <div>
     <button on:click={ start }>💪 lag liste</button>
@@ -60,17 +80,17 @@
 </div>
 
 {#if textInput }
-    <p>💡 antall linjer: {textInput.split("\n").length}</p>
+    <p><i>💡 antall lenker: {textInput.split("\n").length}</i></p>
 {/if}
 
 {#if loading && mode != undefined}
-    <p>⏳ laster {mode} {items.length} / {textInput.split("\n").length} ... (eller feil, si)</p>
+    <p>⏳ laster {mode} {items.length + 1} / {textInput.split("\n").length} ... (eller feil, si)</p>
 {/if}
 
 <div bind:this={renderedList}> <!--- for kopiering -->  
     {#if mode == "artikkel"}
         {#each items as item}
-            <b><a href = {item.url}>{item.title}</a></b>
+            <b>{getEmoji(emojis)} <a href = {item.url}>{item.title}</a></b>
             <p>{item.info}</p>
             <br>
         {/each}
