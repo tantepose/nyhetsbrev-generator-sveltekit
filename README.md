@@ -1,4 +1,5 @@
-![Skjermbilde 2023-05-15 214905](https://github.com/tantepose/nyhetsbrev-generator-sveltekit/assets/30694360/95ca4d45-ab04-4d97-8b3c-efbde76b7f87)
+
+![Skjermbilde 2023-07-07 135301](https://github.com/tantepose/nyhetsbrev-generator-sveltekit/assets/30694360/818b800a-8be3-4216-9b99-7c51fa6086b4)
 
 # nyhetsbrev-generator
 
