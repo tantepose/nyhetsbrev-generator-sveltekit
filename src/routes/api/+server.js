@@ -14,14 +14,14 @@ export async function GET({ url }) {
   const item = {}
   
   item.url = target
-  item.title = $('h1').first().text()
 
-  if (mode == "artikkel") {
+  if (mode == "artikkel") { // fra kode24.no
     item.info = $('.standfirst').text()
-  } else if (mode == "annonse") {
-    item.info = $('.firstname').text()
+    item.title = $('h1').first().text()
+  } else if (mode == "annonse") { // fra kodejobb.no
+    item.title = $("title").text()
   }
 
-  console.log("💭 API: returnerer", item)
+  console.log("💭 ", item)
   return json(item)
 }

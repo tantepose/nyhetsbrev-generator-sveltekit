@@ -13,12 +13,12 @@
 
         getItems(textInput.split("\n")) // skrap URL-er fra hver linje i textarea
         .then(() => {
-            console.log("👍", mode, items)
+            console.log("✍ ", mode, items)
             loading = false
         })
     }
 
-    // start skraping gjennom API
+    // skraping gjennom API
     async function getItems(urls) {
         for (const url of urls) {
             const response = await fetch(`/api/?url=${(url)}&mode=${(mode)}`)
@@ -29,9 +29,9 @@
 
     // automatisk riktig mode ut fra ord i første URL i lista
     function getMode() {
-        if (textInput.split("\n")[0].search("/jobb/") > -1) {
+        if (textInput.split("\n")[0].search("kodejobb.no/") > -1) {
             return "annonse"
-        } else if (textInput.split("\n")[0].search("/artikkel/") > -1) { 
+        } else if (textInput.split("\n")[0].search("kode24.no/") > -1) { 
             return "artikkel"
         } else {
             return undefined
@@ -99,7 +99,7 @@
     {#if mode == "annonse"}
         <ul>
             {#each items as item}
-                <li>{item.info}: <a href = {item.url}>{item.title}</a></li>
+                <li><a href = {item.url}>{item.title}</a></li>
             {/each}
         </ul>
     {/if}
