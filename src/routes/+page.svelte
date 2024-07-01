@@ -48,8 +48,9 @@
         window.getSelection().removeAllRanges();
     }
 
-    // basert på https://erikmartinjordan.com/get-random-emoji-javascript
-    let emojis = [
+    function getEmoji () { 
+        // basert på https://erikmartinjordan.com/get-random-emoji-javascript
+        let emojis = [
         '🍇','🍈','🍉','🍊','🍋','🍌','🍍','🥭','🍎','🍏','🍐','🍑','🍒','🍓','🥝','🍅',
         '🍦','🍧','🍨','🍩','🍪','🎂','🍰','🧁','🥧','🍫','🍬','🍭','🍮','🍯',
         '🐵','🐒','🦍','🦧','🐶','🐕','🐕‍🦺','🐩','🐺','🦊','🦝','🐱','🐈','🦁','🐯','🐅','🐆','🐴','🐎','🦄',
@@ -61,10 +62,9 @@
         '💐','🌸','💮','🌹','🥀','🌺','🌻','🌼','🌷',
         '🦃','🐔','🐓','🐣','🐤','🐥','🐦','🐧','🕊','🦅','🦆','🦢','🦉','🦩','🦚','🦜',
         '👶','🧒','👦','👧','🧑','👱','👨','🧔'
-    ]
+        ]
 
-    function getEmoji (array) { 
-        return array[Math.floor(Math.random()*array.length)];
+        return emojis[Math.floor(Math.random()*emojis.length)];
     }
 
 </script>
@@ -90,7 +90,7 @@
 <div bind:this={renderedList}> <!--- for kopiering -->  
     {#if mode == "artikkel"}
         {#each items as item}
-            <b>{getEmoji(emojis)} <a href = {item.url}>{item.title}</a></b>
+            <b>{getEmoji()} <a href = {item.url}>{item.title}</a></b>
             <p>{item.info}</p>
             <br>
         {/each}

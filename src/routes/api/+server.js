@@ -9,7 +9,7 @@ export async function GET({ url }) {
   const response = await axios.get(target)
   const $ = cheerio.load(response.data)
 
-  console.log("💭 API: skraping starta av " + target + ", med modus: " + mode)
+  console.log("💭 skraping starta av " + target + ", med modus: " + mode)
 
   const item = {}
   
@@ -22,6 +22,6 @@ export async function GET({ url }) {
     item.title = $("title").text()
   }
 
-  console.log("💭 ", item)
+  console.log("💭 returnerer: ", item)
   return json(item)
 }
