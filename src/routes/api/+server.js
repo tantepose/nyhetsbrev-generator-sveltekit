@@ -16,7 +16,7 @@ export async function GET({ url }) {
   item.url = target
 
   if (mode == "artikkel") { // fra kode24.no
-    item.info = $('.subtitle').text()
+    item.info = $('.subtitle').first().text() // oppdatert for lab4
     item.title = $('h1').first().text()
   } else if (mode == "annonse") { // fra kodejobb.no
     item.title = $("title").text()
